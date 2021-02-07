@@ -80,7 +80,7 @@ public class RandomUtils {
             //trans to ms
             int randomPeriodMs = getRandomAbsInt(period * 1000);
             long randomTimeStamp = pos == true ? start.getTime() + randomPeriodMs : start.getTime() - randomPeriodMs;
-            resRandomTime = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss").format(randomTimeStamp);
+            resRandomTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(randomTimeStamp);
         } catch (ParseException e) {
             throw new IllegalStateException("时间转换异常");
         }
@@ -101,7 +101,7 @@ public class RandomUtils {
         //trans to ms
         int randomPeriodMs = getRandomAbsInt(period * 1000);
         long randomTimeStamp = pos == true ? currentTimestamp + randomPeriodMs : currentTimestamp - randomPeriodMs;
-        resRandomTime = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss").format(randomTimeStamp);
+        resRandomTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(randomTimeStamp);
         return resRandomTime;
     }
 
