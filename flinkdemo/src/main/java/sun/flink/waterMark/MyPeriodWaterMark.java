@@ -11,12 +11,12 @@ import javax.annotation.Nullable;
  * Created byX on 2021-02-03 17:24
  * Desc:
  */
-public class MySourceWaterMark implements AssignerWithPeriodicWatermarks<UserInfo> {
+public class MyPeriodWaterMark implements AssignerWithPeriodicWatermarks<UserInfo> {
 
     //second default 10s
     private long maxDelay = 10;
 
-    public MySourceWaterMark(long maxDelay) {
+    public MyPeriodWaterMark(long maxDelay) {
         this.maxDelay = maxDelay;
     }
 
