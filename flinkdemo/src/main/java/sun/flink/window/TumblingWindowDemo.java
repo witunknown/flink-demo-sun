@@ -21,7 +21,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Created byX on 2021-02-03 17:03
- * Desc:
+ * Desc:滚动窗口，基于时间
  */
 public class TumblingWindowDemo {
 
