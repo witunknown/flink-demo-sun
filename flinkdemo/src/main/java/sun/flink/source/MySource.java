@@ -24,7 +24,11 @@ public class MySource extends RichSourceFunction<UserInfo> {
      */
     private AtomicInteger num;
 
-    private int timeRange=30;
+    private int timeRange = 30;
+
+    private int uidPoolSize = 0;
+    //ms
+    private int eventFreq = 500;
 
     public AtomicInteger getNum() {
         return num;
@@ -50,6 +54,17 @@ public class MySource extends RichSourceFunction<UserInfo> {
     }
 
 
+    public MySource(AtomicInteger num, int uidPoolSize) {
+        this.num = num;
+        this.uidPoolSize = uidPoolSize;
+    }
+
+    public MySource(AtomicInteger num, int uidPoolSize, int eventFreq) {
+        this.num = num;
+        this.uidPoolSize = uidPoolSize;
+        this.eventFreq = eventFreq;
+    }
+
     @Override
     public void open(Configuration parameters) throws Exception {
         //
@@ -58,14 +73,16 @@ public class MySource extends RichSourceFunction<UserInfo> {
 
     @Override
     public void run(SourceContext<UserInfo> ctx) throws Exception {
-        while (isRunning&&num.get()>0) {
+        while (isRunning && num.get() > 0) {
             String name = RandomUtils.getRandomNameDefault();
-            String id = RandomUtils.getRandomId();
+
+            String id = this.uidPoolSize == 0 ? RandomUtils.getRandomId() : RandomUtils.getUidFormPool(uidPoolSize);
             String sex = RandomUtils.getRandomSex();
             int source = RandomUtils.getRandomScore(100);
             String visitTime = RandomUtils.getRandomTimeBaseCurrentTime(timeRange);
-            UserInfo user = new UserInfo(id, name, sex, visitTime, source);
-            TimeUnit.MILLISECONDS.sleep(500);
+            String visitPage = RandomUtils.getVisitPath();
+            UserInfo user = new UserInfo(id, name, sex, visitTime, source, visitPage);
+            TimeUnit.MILLISECONDS.sleep(eventFreq);
             ctx.collect(user);
             num.getAndDecrement();
         }
@@ -75,11 +92,7 @@ public class MySource extends RichSourceFunction<UserInfo> {
 
     @Override
     public void cancel() {
-                isRunning=false;
+        isRunning = false;
     }
 
-
-    public static void main(String[] args) throws Exception {
-
-    }
 }

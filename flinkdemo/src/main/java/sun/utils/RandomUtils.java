@@ -1,11 +1,11 @@
 package sun.utils;
 
+import io.netty.util.internal.StringUtil;
+import scala.Int;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Random;
-import java.util.Timer;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * Created byX on 2021-02-03 00:39
@@ -13,6 +13,7 @@ import java.util.UUID;
  */
 public class RandomUtils {
 
+    private static ArrayList<String> uidList = new ArrayList<>();
 
     public static String getRandomNameDefault() throws Exception {
         int length = 10;
@@ -103,6 +104,37 @@ public class RandomUtils {
         long randomTimeStamp = pos == true ? currentTimestamp + randomPeriodMs : currentTimestamp - randomPeriodMs;
         resRandomTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(randomTimeStamp);
         return resRandomTime;
+    }
+
+    public static String getVisitPath() {
+        String visitPage = "";
+        try {
+            visitPage = getRandomName(1);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return StringUtil.isNullOrEmpty(visitPage) == true ? "A" : visitPage;
+    }
+
+    public static String getUidFormPool(int uidPoolSize) {
+        if (uidPoolSize <= 0) {
+            throw new IllegalArgumentException("参数异常");
+        }
+
+        String uid = "";
+        if (uidList.size() <= 0) {
+            initUidPool(uidPoolSize);
+        }
+        int randomIndex = RandomUtils.getRandomAbsInt(uidList.size());
+        return uidList.get(randomIndex);
+    }
+
+    private static void initUidPool(int uidPoolSize) {
+        for (int i = 0; i < uidPoolSize; i++) {
+            uidList.add(RandomUtils.getRandomId());
+        }
+
     }
 
 }

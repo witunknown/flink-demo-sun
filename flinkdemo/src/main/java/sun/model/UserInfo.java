@@ -13,6 +13,7 @@ public class UserInfo implements Serializable {
     private String sex;
     private String visitTime;
     private int source;
+    private String visitPage;
 
     public UserInfo() {
     }
@@ -23,6 +24,23 @@ public class UserInfo implements Serializable {
         this.sex = sex;
         this.visitTime = visitTime;
         this.source = source;
+    }
+
+    public UserInfo(String id, String name, String sex, String visitTime, int source, String visitPage) {
+        this.id = id;
+        this.name = name;
+        this.sex = sex;
+        this.visitTime = visitTime;
+        this.source = source;
+        this.visitPage = visitPage;
+    }
+
+    public String getVisitPage() {
+        return visitPage;
+    }
+
+    public void setVisitPage(String visitPage) {
+        this.visitPage = visitPage;
     }
 
     public String getId() {

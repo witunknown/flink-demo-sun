@@ -16,6 +16,11 @@ public class MyPeriodWaterMark implements AssignerWithPeriodicWatermarks<UserInf
     //second default 10s
     private long maxDelay = 10;
 
+    private long maxTimeStamp;
+
+    public MyPeriodWaterMark() {
+    }
+
     public MyPeriodWaterMark(long maxDelay) {
         this.maxDelay = maxDelay;
     }
@@ -23,14 +28,17 @@ public class MyPeriodWaterMark implements AssignerWithPeriodicWatermarks<UserInf
     @Nullable
     @Override
     public Watermark getCurrentWatermark() {
-        System.out.println("system time is:" + DateUtils.getDate(System.currentTimeMillis()));
-        return new Watermark(System.currentTimeMillis() - maxDelay * 1000);
+//        System.out.println("system time is:" + DateUtils.getDate(System.currentTimeMillis()));
+        return new Watermark(maxTimeStamp - maxDelay * 1000);
     }
 
     @Override
     public long extractTimestamp(UserInfo element, long previousElementTimestamp) {
         String date = element.getVisitTime();
         long timestamp = DateUtils.getTimestamp(date);
-        return timestamp>System.currentTimeMillis()?timestamp:System.currentTimeMillis();
+        if (timestamp > maxTimeStamp) {
+            maxTimeStamp = timestamp;
+        }
+        return timestamp;
     }
 }
