@@ -35,4 +35,14 @@ public class SourceUtils {
         mySource.setTimeRange(1);
         return mySource;
     }
+
+    public static MySource rangeTimeSource(int eventNum, int uidPoolSize, int freq, int rangeTime) {
+        if (eventNum <= 0 || uidPoolSize <= 0 || freq <= 0 || rangeTime <= 0) {
+            throw new IllegalArgumentException("参数异常");
+        }
+        AtomicInteger num = new AtomicInteger(eventNum);
+        MySource mySource = new MySource(num, uidPoolSize, freq);
+        mySource.setTimeRange(rangeTime);
+        return mySource;
+    }
 }
