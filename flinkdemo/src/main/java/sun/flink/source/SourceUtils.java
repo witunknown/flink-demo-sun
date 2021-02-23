@@ -36,6 +36,14 @@ public class SourceUtils {
         return mySource;
     }
 
+    /**
+     *
+     * @param eventNum
+     * @param uidPoolSize
+     * @param freq   数据发送频率 ms
+     * @param rangeTime   数据发送区间，以当前时间
+     * @return
+     */
     public static MySource rangeTimeSource(int eventNum, int uidPoolSize, int freq, int rangeTime) {
         if (eventNum <= 0 || uidPoolSize <= 0 || freq <= 0 || rangeTime <= 0) {
             throw new IllegalArgumentException("参数异常");
