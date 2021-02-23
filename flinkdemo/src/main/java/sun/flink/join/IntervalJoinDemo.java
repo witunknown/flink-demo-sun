@@ -18,7 +18,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * Created byX on 2021-02-24 00:02
  * Desc:基于间隔的join
  */
-public class JoinDemo {
+public class IntervalJoinDemo {
     public static void main(String[] args) throws Exception {
         Configuration configuration = new Configuration();
         final StreamExecutionEnvironment env = StreamExecutionEnvironment.createLocalEnvironmentWithWebUI(configuration);
