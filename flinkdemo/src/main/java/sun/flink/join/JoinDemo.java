@@ -16,7 +16,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Created byX on 2021-02-24 00:02
- * Desc:
+ * Desc:基于间隔的join
  */
 public class JoinDemo {
     public static void main(String[] args) throws Exception {
