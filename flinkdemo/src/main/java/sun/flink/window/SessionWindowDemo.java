@@ -14,16 +14,18 @@ import org.apache.flink.streaming.api.windowing.assigners.TumblingEventTimeWindo
 import org.apache.flink.streaming.api.windowing.time.Time;
 import org.apache.flink.streaming.api.windowing.windows.TimeWindow;
 import org.apache.flink.util.Collector;
+import sun.flink.sink.ClickHouseSink;
 import sun.flink.source.SourceUtils;
 import sun.flink.waterMark.MyPeriodWaterMark;
 import sun.model.UserInfo;
+import sun.model.UserVisitInfo;
 import sun.utils.DateUtils;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Created byX on 2021-02-08 16:07
- * Desc:
+ * Desc: session 窗口，基于相同keyed id 的间隔时间
  */
 public class SessionWindowDemo {
     public static <visitPath> void main(String[] args) throws Exception {
@@ -35,20 +37,20 @@ public class SessionWindowDemo {
         DataStreamSource<UserInfo> source = env.addSource(SourceUtils.visitPathSource(100, 5, 2000));
         source.assignTimestampsAndWatermarks(new MyPeriodWaterMark()).map(t -> {
             return new Tuple2<String, String>(t.getId(), t.getVisitPage());
-        }).returns(Types.TUPLE(Types.STRING, Types.STRING)).keyBy(0).window(ProcessingTimeSessionWindows.withGap(Time.seconds(5))).process(new ProcessWindowFunction<Tuple2<String, String>, Tuple2<String, String>, Tuple, TimeWindow>() {
-
+        }).returns(Types.TUPLE(Types.STRING, Types.STRING)).keyBy(0).window(ProcessingTimeSessionWindows.withGap(Time.seconds(5))).process(new ProcessWindowFunction<Tuple2<String, String>, UserVisitInfo, Tuple, TimeWindow>() {
             @Override
-            public void process(Tuple tuple, Context context, Iterable<Tuple2<String, String>> elements, Collector<Tuple2<String, String>> out) throws Exception {
-                StringBuilder path = new StringBuilder();
+            public void process(Tuple tuple, Context context, Iterable<Tuple2<String, String>> elements, Collector<UserVisitInfo> out) throws Exception {
+                StringBuilder path = new StringBuilder("startFlag");
                 String uid = elements.iterator().next().f0;
                 elements.forEach(element -> {
                     path.append(">").append(element.f1);
                 });
                 String start = DateUtils.getDate(context.window().getStart());
                 String end = DateUtils.getDate(context.window().getEnd());
-                out.collect(new Tuple2<String, String>(start + "--" + end + "::" + uid.substring(0, 6), path.toString()));
+                out.collect(new UserVisitInfo(uid, path.toString(), start, end));
+//                out.collect(new Tuple2<String, String>(start + "--" + end + "::" + uid.substring(0, 6), path.toString()));
             }
-        }).print();
+        }).addSink(new ClickHouseSink());
 
         env.execute("sesionWindow demo");
     }
