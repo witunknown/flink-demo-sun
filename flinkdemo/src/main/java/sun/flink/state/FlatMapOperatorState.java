@@ -1,16 +1,12 @@
 package sun.flink.state;
 
 import org.apache.flink.api.common.functions.RichFlatMapFunction;
-import org.apache.flink.api.common.state.ListStateDescriptor;
 import org.apache.flink.api.common.state.ValueState;
 import org.apache.flink.api.common.state.ValueStateDescriptor;
 import org.apache.flink.api.common.typeinfo.TypeHint;
 import org.apache.flink.api.common.typeinfo.TypeInformation;
 import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.flink.configuration.Configuration;
-import org.apache.flink.runtime.state.FunctionInitializationContext;
-import org.apache.flink.runtime.state.FunctionSnapshotContext;
-import org.apache.flink.streaming.api.checkpoint.CheckpointedFunction;
 import org.apache.flink.util.Collector;
 import sun.model.UserInfo;
 
@@ -25,7 +21,7 @@ public class FlatMapOperatorState extends RichFlatMapFunction<UserInfo, Tuple2<S
     @Override
     public void flatMap(UserInfo value, Collector<Tuple2<String, String>> out) throws Exception {
         //超过60分的，每5个人打印用户id和访问页
-        if (value.getSource() >= 60) {
+        if (value.getScore() >= 60) {
             Tuple2<String, String> current = sumStatue.value();
             if (current.f0.split(";").length > 5) {
                 out.collect(new Tuple2<>(current.f0, current.f1));

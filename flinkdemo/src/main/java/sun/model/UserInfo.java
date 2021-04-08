@@ -12,7 +12,7 @@ public class UserInfo implements Serializable {
     private String name;
     private String sex;
     private String visitTime;
-    private int source;
+    private int score;
     private String visitPage;
 
     public UserInfo() {
@@ -23,7 +23,7 @@ public class UserInfo implements Serializable {
         this.name = name;
         this.sex = sex;
         this.visitTime = visitTime;
-        this.source = source;
+        this.score = source;
     }
 
     public UserInfo(String id, String name, String sex, String visitTime, int source, String visitPage) {
@@ -31,7 +31,7 @@ public class UserInfo implements Serializable {
         this.name = name;
         this.sex = sex;
         this.visitTime = visitTime;
-        this.source = source;
+        this.score = source;
         this.visitPage = visitPage;
     }
 
@@ -75,12 +75,12 @@ public class UserInfo implements Serializable {
         this.visitTime = visitTime;
     }
 
-    public int getSource() {
-        return source;
+    public int getScore() {
+        return score;
     }
 
-    public void setSource(int source) {
-        this.source = source;
+    public void setScore(int score) {
+        this.score = score;
     }
 
     @Override
@@ -90,7 +90,7 @@ public class UserInfo implements Serializable {
                 ", name='" + name + '\'' +
                 ", sex='" + sex + '\'' +
                 ", visitTime='" + visitTime + '\'' +
-                ", source=" + source +
+                ", source=" + score +
                 '}';
     }
 }

@@ -37,7 +37,7 @@ public class TumblingWindowBaseEventDemo {
                 AtomicInteger totalScore = new AtomicInteger();
                 AtomicInteger num = new AtomicInteger();
                 input.forEach(t -> {
-                    totalScore.getAndAdd(t.f1.getSource());
+                    totalScore.getAndAdd(t.f1.getScore());
                     num.getAndIncrement();
                 });
                 int average = totalScore.get() / num.get();
