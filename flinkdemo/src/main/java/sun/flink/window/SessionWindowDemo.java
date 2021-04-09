@@ -1,6 +1,5 @@
 package sun.flink.window;
 
-import org.apache.flink.api.common.typeinfo.TypeInformation;
 import org.apache.flink.api.common.typeinfo.Types;
 import org.apache.flink.api.java.tuple.Tuple;
 import org.apache.flink.api.java.tuple.Tuple2;
@@ -10,7 +9,6 @@ import org.apache.flink.streaming.api.datastream.DataStreamSource;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.functions.windowing.ProcessWindowFunction;
 import org.apache.flink.streaming.api.windowing.assigners.ProcessingTimeSessionWindows;
-import org.apache.flink.streaming.api.windowing.assigners.TumblingEventTimeWindows;
 import org.apache.flink.streaming.api.windowing.time.Time;
 import org.apache.flink.streaming.api.windowing.windows.TimeWindow;
 import org.apache.flink.util.Collector;
@@ -34,7 +32,7 @@ public class SessionWindowDemo {
         AtomicInteger num = new AtomicInteger(100);
         env.setStreamTimeCharacteristic(TimeCharacteristic.EventTime);
 //        env.getConfig().setAutoWatermarkInterval(1000);
-        DataStreamSource<UserInfo> source = env.addSource(SourceUtils.visitPathSource(100, 5, 2000));
+        DataStreamSource<UserInfo> source = env.addSource(SourceUtils.visitPathSource(10000, 20, 1000));
         source.assignTimestampsAndWatermarks(new MyPeriodWaterMark()).map(t -> {
             return new Tuple2<String, String>(t.getId(), t.getVisitPage());
         }).returns(Types.TUPLE(Types.STRING, Types.STRING)).keyBy(0).window(ProcessingTimeSessionWindows.withGap(Time.seconds(5))).process(new ProcessWindowFunction<Tuple2<String, String>, UserVisitInfo, Tuple, TimeWindow>() {
