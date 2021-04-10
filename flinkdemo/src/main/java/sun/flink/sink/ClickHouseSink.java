@@ -27,7 +27,7 @@ public class ClickHouseSink extends RichSinkFunction<UserVisitInfo> {
     @Override
     public void invoke(UserVisitInfo userVisitInfo, Context context) throws Exception {
         String sql = String.format("insert into user_visit_page values('%s','%s','%s','%s')", userVisitInfo.getUid(), userVisitInfo.getPath(), userVisitInfo.getStartDateTime(), userVisitInfo.getEndDateTime());
-        System.out.println(sql);
+        System.out.println(statement.toString());
         statement.execute(sql);
     }
 

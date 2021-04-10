@@ -48,7 +48,7 @@ public class SessionWindowDemo {
                 out.collect(new UserVisitInfo(uid, path.toString(), start, end));
 //                out.collect(new Tuple2<String, String>(start + "--" + end + "::" + uid.substring(0, 6), path.toString()));
             }
-        }).addSink(new ClickHouseSink());
+        }).setParallelism(3).addSink(new ClickHouseSink());
 
         env.execute("sesionWindow demo");
     }
